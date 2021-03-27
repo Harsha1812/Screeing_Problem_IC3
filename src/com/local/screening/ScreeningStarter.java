@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.local.screening.model.ProjectDetails;
@@ -19,33 +22,38 @@ public class ScreeningStarter {
 				+ "1233456,2345,us_west,BlueTeam,ProjectDate,2221s\r\n"
 				+ "3244132,2346,eu_west,YellowTeam3,ProjectEgg,4122S";
 
-	
 		List<ProjectDetails> teamDetails = getProjectDetailsList(inputString);
 		getProjectReport(teamDetails);
 	}
 
 	private static void getProjectReport(List<ProjectDetails> teamDetails) {
-		Map<String, Double> avgBuildTimeByGeoZone = teamDetails.stream().collect(Collectors
-				.groupingBy(ProjectDetails::getGeozone, Collectors.averagingDouble(ProjectDetails::getBuildduration)));
 
-		for (Entry<String, Double> entry : avgBuildTimeByGeoZone.entrySet())
-			System.out.println("  The average buildduration for geozone " + entry.getKey() + ": " + entry.getValue());
-
-		Map<Integer, Long> custIdConId = teamDetails.stream()
+		Map<Integer, Long> custIdConId = teamDetails.stream().filter(distinctByKey(p -> p.getCustomerId()))
 				.collect(Collectors.groupingBy(ProjectDetails::getContractId, Collectors.counting()));
 
 		for (Entry<Integer, Long> entry : custIdConId.entrySet())
 			System.out
 					.println("  The number of customerIds for contractId " + entry.getKey() + ": " + entry.getValue());
 
-		Map<String, Long> custIdGeoId = teamDetails.stream()
+		Map<String, Long> custIdGeoId = teamDetails.stream().filter(distinctByKey(p -> p.getCustomerId()))
 				.collect(Collectors.groupingBy(ProjectDetails::getGeozone, Collectors.counting()));
 
 		for (Entry<String, Long> entry : custIdGeoId.entrySet())
 			System.out.println("  The number of cutIds for geozone " + entry.getKey() + ": " + entry.getValue());
+		Map<String, Double> avgBuildTimeByGeoZone = teamDetails.stream().collect(Collectors
+				.groupingBy(ProjectDetails::getGeozone, Collectors.averagingDouble(ProjectDetails::getBuildduration)));
+
+		for (Entry<String, Double> entry : avgBuildTimeByGeoZone.entrySet())
+			System.out.println("  The average buildduration for geozone " + entry.getKey() + ": " + entry.getValue());
+
+		Map<String, List<ProjectDetails>> custIdGeoIdList = teamDetails.stream()
+				.filter(distinctByKey(p -> p.getCustomerId()))
+				.collect(Collectors.groupingBy(ProjectDetails::getGeozone, Collectors.toList()));
+		for (Entry<String, List<ProjectDetails>> entry : custIdGeoIdList.entrySet())
+			System.out.println("  The Projects under geozone " + entry.getKey() + ": " + entry.getValue());
 
 	}
-	
+
 	public static List<ProjectDetails> getProjectDetailsList(String inputString) {
 
 		List<String> projectDetailsList = getListOfInputString(inputString);
@@ -71,5 +79,10 @@ public class ScreeningStarter {
 		return projectDetailsList;
 
 	}
-	
+
+	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+		Map<Object, Boolean> map = new ConcurrentHashMap<>();
+		return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+	}
+
 }
