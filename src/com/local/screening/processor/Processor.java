@@ -46,7 +46,7 @@ public class Processor {
 
 	}
 
-	private Map<String, List<Long>> getCustomerIdsListByGeoZone(List<ProjectDetails> teamDetails, Utility util) {
+	public Map<String, List<Long>> getCustomerIdsListByGeoZone(List<ProjectDetails> teamDetails, Utility util) {
 		Map<String, List<Long>> onlyCustIdGeoIdList = teamDetails.stream()
 				.filter(util.distinctByKey(p -> p.getCustomerId()))
 				.collect(Collectors.groupingBy(ProjectDetails::getGeozone,
@@ -54,20 +54,20 @@ public class Processor {
 		return onlyCustIdGeoIdList;
 	}
 
-	private Map<String, Double> getAverageBuildTimeByGeoZone(List<ProjectDetails> teamDetails) {
+	public Map<String, Double> getAverageBuildTimeByGeoZone(List<ProjectDetails> teamDetails) {
 		Map<String, Double> avgBuildTimeByGeoZone = teamDetails.stream().collect(Collectors
 				.groupingBy(ProjectDetails::getGeozone, Collectors.averagingDouble(ProjectDetails::getBuildduration)));
 		return avgBuildTimeByGeoZone;
 	}
 
-	private Map<String, Long> getUniqueCustomerIdsCountByGeoZone(List<ProjectDetails> teamDetails, Utility util) {
+	public Map<String, Long> getUniqueCustomerIdsCountByGeoZone(List<ProjectDetails> teamDetails, Utility util) {
 		Map<String, Long> disctinctCustIdsByGeoZone = teamDetails.stream()
 				.filter(util.distinctByKey(p -> p.getCustomerId()))
 				.collect(Collectors.groupingBy(ProjectDetails::getGeozone, Collectors.counting()));
 		return disctinctCustIdsByGeoZone;
 	}
 
-	private Map<Integer, Long> getUniqueCustomerIdsCountByContarctId(List<ProjectDetails> teamDetails, Utility util) {
+	public Map<Integer, Long> getUniqueCustomerIdsCountByContarctId(List<ProjectDetails> teamDetails, Utility util) {
 
 		Map<Integer, Long> distinctCustIdsByCntrctId = teamDetails.stream()
 				.filter(util.distinctByKey(p -> p.getCustomerId()))

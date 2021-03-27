@@ -28,7 +28,7 @@ public class Utility {
 
 			// Checking for the columns count. Adding to the list only if columns count is
 			// 6.
-			if (projectDetails.size() != 6) {
+			if (checkForAllProperties(projectDetails)) {
 				LOG.info(
 						"Not considering or adding this row to the project list due to the missing of one or more properties : "
 								+ projectDetails.toString());
@@ -55,7 +55,11 @@ public class Utility {
 		return projectDetailsList;
 	}
 
-	private List<String> getListFromInputString(String inputString) {
+	public boolean checkForAllProperties(List<String> projectDetails) {
+		return projectDetails.size() != 6;
+	}
+
+	public List<String> getListFromInputString(String inputString) {
 
 		// Splitting the inputText based on the new line regular expression.
 		List<String> projectDetailsList = Arrays.asList(inputString.split(Constants.REGEX_FOR_NEWLINE));
