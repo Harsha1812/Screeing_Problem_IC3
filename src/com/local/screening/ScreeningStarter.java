@@ -32,25 +32,27 @@ public class ScreeningStarter {
 				.collect(Collectors.groupingBy(ProjectDetails::getContractId, Collectors.counting()));
 
 		for (Entry<Integer, Long> entry : custIdConId.entrySet())
-			System.out
-					.println("  The number of customerIds for contractId " + entry.getKey() + ": " + entry.getValue());
+			System.out.println(
+					"The number of unique customerIds for contractId " + entry.getKey() + ": " + entry.getValue());
 
 		Map<String, Long> custIdGeoId = teamDetails.stream().filter(distinctByKey(p -> p.getCustomerId()))
 				.collect(Collectors.groupingBy(ProjectDetails::getGeozone, Collectors.counting()));
 
 		for (Entry<String, Long> entry : custIdGeoId.entrySet())
-			System.out.println("  The number of cutIds for geozone " + entry.getKey() + ": " + entry.getValue());
+			System.out.println(
+					"The number of unique customerIds for geozone " + entry.getKey() + ": " + entry.getValue());
 		Map<String, Double> avgBuildTimeByGeoZone = teamDetails.stream().collect(Collectors
 				.groupingBy(ProjectDetails::getGeozone, Collectors.averagingDouble(ProjectDetails::getBuildduration)));
 
 		for (Entry<String, Double> entry : avgBuildTimeByGeoZone.entrySet())
-			System.out.println("  The average buildduration for geozone " + entry.getKey() + ": " + entry.getValue());
+			System.out.println("The average buildduration for geozone " + entry.getKey() + ": " + entry.getValue());
 
-		Map<String, List<ProjectDetails>> custIdGeoIdList = teamDetails.stream()
-				.filter(distinctByKey(p -> p.getCustomerId()))
-				.collect(Collectors.groupingBy(ProjectDetails::getGeozone, Collectors.toList()));
-		for (Entry<String, List<ProjectDetails>> entry : custIdGeoIdList.entrySet())
-			System.out.println("  The Projects under geozone " + entry.getKey() + ": " + entry.getValue());
+		Map<String, List<Long>> onlyCustIdGeoIdList = teamDetails.stream().filter(distinctByKey(p -> p.getCustomerId()))
+				.collect(Collectors.groupingBy(ProjectDetails::getGeozone,
+						Collectors.mapping(ProjectDetails::getCustomerId, Collectors.toList())));
+
+		for (Entry<String, List<Long>> entry : onlyCustIdGeoIdList.entrySet())
+			System.out.println("The Unique Customer Ids under geozone " + entry.getKey() + ": " + entry.getValue());
 
 	}
 
