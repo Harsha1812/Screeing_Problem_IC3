@@ -15,7 +15,7 @@ public class Processor {
 	public void getProjectReport(String inputString) {
 		List<ProjectDetails> teamDetails = helper.getProjectDetailsList(inputString);
 
-		Map<Integer, Long> distinctCustIdsCountByCntrctId = helper.getUniqueCustomerIdsCountByContarctId(teamDetails);
+		Map<Integer, Long> distinctCustIdsCountByCntrctId = helper.getUniqueCustomerIdsCountByContractId(teamDetails);
 
 		LOG.info("Printing the number of unique customerId for each contractId. ");
 		for (Entry<Integer, Long> entry : distinctCustIdsCountByCntrctId.entrySet())

@@ -1,22 +1,12 @@
 package com.local.screening.model;
 
-public class ProjectDetails {
-
+public class Builder {
 	private Long customerId;
 	private Integer contractId;
 	private String geoZone;
 	private String teamCode;
 	private String projectCode;
 	private Long buildDuration;
-
-	public ProjectDetails(Builder builder) {
-		this.customerId = builder.getCustomerId();
-		this.contractId = builder.getContractId();
-		this.geoZone = builder.getGeoZone();
-		this.teamCode = builder.getTeamCode();
-		this.projectCode = builder.getProjectCode();
-		this.buildDuration = builder.getBuildDuration();
-	}
 
 	public Long getCustomerId() {
 		return customerId;
@@ -66,10 +56,38 @@ public class ProjectDetails {
 		this.buildDuration = buildDuration;
 	}
 
-	@Override
-	public String toString() {
-		return "ProjectDetails [customerId=" + customerId + ", contractId=" + contractId + ", geozone=" + geoZone
-				+ ", teamcode=" + teamCode + ", projectcode=" + projectCode + ", buildduration=" + buildDuration + "]";
+	public Builder customerId(Long value) {
+		this.customerId = value;
+		return this;
+	}
+
+	public Builder contractId(Integer value) {
+		this.contractId = value;
+		return this;
+	}
+
+	public Builder geozone(String value) {
+		this.geoZone = value;
+		return this;
+	}
+
+	public Builder teamcode(String value) {
+		this.teamCode = value;
+		return this;
+	}
+
+	public Builder projectcode(String value) {
+		this.projectCode = value;
+		return this;
+	}
+
+	public Builder buildduration(Long value) {
+		this.buildDuration = value;
+		return this;
+	}
+
+	public ProjectDetails build() {
+		return new ProjectDetails(this);
 	}
 
 }

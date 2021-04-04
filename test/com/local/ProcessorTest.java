@@ -37,14 +37,14 @@ public class ProcessorTest {
 	public void checkForValidCountByContractId() throws Exception {
 
 		List<ProjectDetails> projectDetails = util.getProjectDetailsList(validInputString);
-		assertEquals(3, processor.getUniqueCustomerIdsCountByContarctId(projectDetails).get(2345).longValue());
+		assertEquals(3, processor.getUniqueCustomerIdsCountByContractId(projectDetails).get(2345).longValue());
 	}
 
 	@Test
 	public void checkForInValidCountByContractId() throws Exception {
 
 		List<ProjectDetails> projectDetails = util.getProjectDetailsList(inValidInputString);
-		assertEquals(1, processor.getUniqueCustomerIdsCountByContarctId(projectDetails).get(2346).longValue());
+		assertEquals(1, processor.getUniqueCustomerIdsCountByContractId(projectDetails).get(2346).longValue());
 	}
 
 	@Test

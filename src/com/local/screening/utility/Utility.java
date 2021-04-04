@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import com.local.screening.model.Builder;
 import com.local.screening.model.ProjectDetails;
 
 public class Utility {
@@ -30,11 +31,15 @@ public class Utility {
 				continue;
 			}
 			try {
-				ProjectDetails details = new ProjectDetails(Long.parseLong(projectDetails.get(0)),
-						Integer.parseInt(projectDetails.get(1)), projectDetails.get(2), projectDetails.get(3),
-						projectDetails.get(4),
-						Long.parseLong(projectDetails.get(5).replaceAll(Constants.REGEX_FOR_SECONDS, "")));
+				ProjectDetails details = new Builder().customerId(Long.parseLong(projectDetails.get(0)))
+						.contractId(Integer.parseInt(projectDetails.get(1))).geozone(projectDetails.get(2))
+						.projectcode(projectDetails.get(3)).projectcode(projectDetails.get(4))
+						.buildduration(
+								Long.parseLong(projectDetails.get(5).replaceAll(Constants.REGEX_FOR_SECONDS, "")))
+						.build();
+
 				projectDetailsList.add(details);
+
 			} catch (Exception e) {
 
 				LOG.info("Not considering or adding this row to the project list  : " + projectDetails.toString()
@@ -54,7 +59,7 @@ public class Utility {
 		return projectDetails.size() != 6;
 	}
 
-	public List<String> getListFromInputString(String inputString) {
+	private List<String> getListFromInputString(String inputString) {
 
 		List<String> projectDetailsList = Arrays.asList(inputString.split(Constants.REGEX_FOR_NEWLINE));
 		return projectDetailsList;
